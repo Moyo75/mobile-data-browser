@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { Product, Carrier, Plan } from "./Product";
+
 import _ from "lodash";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("");
   const [order, setOrder] = useState(true);
-  const handleClick = () => setOrder(!order);
 
   const API = "https://craterapi.com/api/package/search";
   const baseUrl = "https://craterapi.com/";
@@ -14,26 +15,6 @@ function App() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ msisdn: "" }),
-  };
-
-  type Product = {
-    id: number;
-    carrier: Carrier;
-    ticker: string;
-    plan: Plan;
-  };
-
-  type Carrier = {
-    name: string;
-    imageUrl: string;
-    country_code: string;
-  };
-
-  type Plan = {
-    expiry_type: string;
-    size: string;
-    unit: string;
-    tnc_url: string;
   };
 
   useEffect(() => {
@@ -63,11 +44,12 @@ function App() {
       </select>
 
       <span>Ascending?</span>
-      <input onChange={handleClick} checked={order} type="checkbox" />
+      <input onClick={() => setOrder(!order)} checked={order} type="checkbox" />
 
       <table>
         <thead>
           <tr>
+            <th>ID</th>
             <th>Plan Expiry</th>
             <th>Plan Size</th>
             <th>Plan Unit</th>
@@ -77,10 +59,11 @@ function App() {
             <th>Link to Terms & Conditions</th>
           </tr>
         </thead>
-        {_.orderBy(products, (filter) => filter, [order]).map(
+        {_.orderBy(products, [filter], [order]).map(
           ({ id, plan, carrier }: Product) => (
             <tbody key={id}>
               <tr>
+                <td>{id}</td>
                 <td>{plan.expiry_type}</td>
                 <td>{plan.size}</td>
                 <td>{plan.unit}</td>
