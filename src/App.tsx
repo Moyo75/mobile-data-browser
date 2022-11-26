@@ -26,6 +26,8 @@ function App() {
       setProducts(data);
     };
 
+    // Tried implementing a fuction that catches the failed requests/errors but to avail due to types
+
     fetchData();
   }, [filter, order]);
 
